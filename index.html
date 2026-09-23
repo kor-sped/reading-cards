@@ -373,7 +373,7 @@
   <div id="viewForm" class="hidden">
     <div class="sheet">
       <h2 id="formTitle">새 카드 작성</h2>
-      <p class="sub">필수 항목은 제목뿐입니다. 나머지는 필요한 만큼만 적으면 됩니다.</p>
+      <p class="sub">필수 항목은 제목뿐입니다. 나머지는 필요한 만큼만 적으면 됩니다. · <a href="study-guide.html" target="_blank" rel="noopener">스터디 가이드</a></p>
 
       <div class="draft-bar hidden" id="draftBar">
         <span>작성하던 내용을 그대로 불러왔어요.</span>
@@ -462,7 +462,7 @@ const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBh
 const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
 /* ── 유형별 질문 라벨과 안내 ──
-   폼에 표시되는 항목: core → gap → method → thoughts → validity → group
+   폼에 표시되는 항목: core → gap → method → validity → thoughts → group
    counter/summary/oneline은 예전 버전 데이터 표시용으로만 남겨둠 */
 const FORM_KEYS = ['core','gap','method','validity','thoughts','group'];
 const META = {

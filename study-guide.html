@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>참여자의 스터디 준비·참여·정리 가이드 — 독서카드함과 함께</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@400;700&family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#FAFAF8; --paper:#FFFFFF; --ink:#1B2A2F; --ink-2:#4A5A60; --line:#D9DED8;
+  --teal:#2B5F73; --teal-soft:#E4EEF2; --moss:#3E6B48; --moss-soft:#E6EFE6; --mark:#F1D38A; --red:#A63D3D;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --bg:#15191B; --paper:#1D2326; --ink:#ECEDE8; --ink-2:#AEB7B3; --line:#33403F;
+    --teal:#8FC1D6; --teal-soft:#20333B; --moss:#9BC8A4; --moss-soft:#22322A; --mark:#7A6320; --red:#E08A8A;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#15191B; --paper:#1D2326; --ink:#ECEDE8; --ink-2:#AEB7B3; --line:#33403F;
+  --teal:#8FC1D6; --teal-soft:#20333B; --moss:#9BC8A4; --moss-soft:#22322A; --mark:#7A6320; --red:#E08A8A;
+}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"Noto Sans KR",system-ui,-apple-system,"Apple SD Gothic Neo",sans-serif;line-height:1.75;font-size:16px;word-break:keep-all}
+main{max-width:720px;margin:0 auto;padding:40px 20px 80px}
+h1,h2,h3{font-family:"Gowun Batang","Nanum Myeongjo",Georgia,serif;line-height:1.35;margin:0}
+h1{font-size:2rem;font-weight:700}
+h2{font-size:1.5rem;margin-top:72px;padding-top:24px;border-top:2px solid var(--ink)}
+h3{font-size:1.15rem;margin-top:36px;color:var(--teal)}
+p{margin:14px 0}
+.lead{font-size:1.05rem;color:var(--ink-2);margin-top:18px}
+.intro-rule{width:56px;height:4px;background:var(--moss);margin:24px 0 8px}
+ul,ol{padding-left:1.3em;margin:10px 0}
+li{margin:6px 0}
+li::marker{color:var(--teal)}
+mark{background:var(--mark);color:inherit;padding:0 3px;border-radius:2px}
+.note{background:var(--teal-soft);border-left:4px solid var(--teal);padding:14px 18px;margin:22px 0;border-radius:0 6px 6px 0}
+.note p{margin:6px 0}
+.warn{background:var(--paper);border-left:4px solid var(--red);padding:14px 18px;margin:22px 0;border-radius:0 6px 6px 0}
+.warn p{margin:6px 0}
+.tpl{background:var(--paper);border:1px solid var(--line);border-radius:8px;padding:18px 20px;margin:20px 0;font-size:.95rem}
+.tpl h4{margin:0 0 10px;font-family:"Gowun Batang",serif;font-size:1.05rem;color:var(--moss)}
+.tpl .row{display:grid;grid-template-columns:150px 1fr;gap:6px 14px;padding:8px 0;border-top:1px dashed var(--line)}
+.tpl .row:first-of-type{border-top:0}
+.tpl .k{font-weight:500;color:var(--teal)}
+.tpl .v{color:var(--ink-2)}
+@media (max-width:480px){.tpl .row{grid-template-columns:1fr}.tpl .k{margin-bottom:-4px}}
+figure{margin:26px 0}
+figure svg{width:100%;height:auto;display:block}
+figcaption{font-size:.85rem;color:var(--ink-2);margin-top:8px;text-align:center}
+.svg-wrap{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:.93rem;margin:16px 0}
+th,td{text-align:left;padding:10px 10px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-weight:500;color:var(--teal);border-bottom:2px solid var(--line)}
+.table-wrap{overflow-x:auto}
+code{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:.9em;background:var(--moss-soft);padding:1px 6px;border-radius:4px}
+pre{background:var(--paper);border:1px solid var(--line);border-radius:8px;padding:14px 16px;overflow-x:auto;font-size:.88rem;line-height:1.6}
+pre code{background:none;padding:0}
+.check{list-style:none;padding-left:0}
+.check li{padding-left:30px;position:relative}
+.check li::before{content:"";position:absolute;left:0;top:7px;width:16px;height:16px;border:2px solid var(--moss);border-radius:4px}
+.svg-t{font-family:"Noto Sans KR",sans-serif;fill:var(--ink)}
+.svg-s{font-family:"Noto Sans KR",sans-serif;fill:var(--ink-2)}
+.svg-w{font-family:"Noto Sans KR",sans-serif;fill:#fff}
+</style>
+</head>
+<body>
+<main>
+
+<h1>참여자로서 잘 준비하고, 덜 말하고, 더 남기는 법</h1>
+<div class="intro-rule"></div>
+<p class="lead">이 문서는 지금 책과 논문을 <strong>읽는 중</strong>이고, 스터디에서는 발제자가 아니라 <strong>참여자</strong>이며, 말이 많은 편이라 조금 <strong>아끼려는</strong> 사람을 위한 가이드입니다. 그리고 준비와 정리의 모든 기록을 나중에 <strong>독서카드함</strong>에 넣을 수 있도록, 카드의 항목 이름을 그대로 씁니다. 평소 책을 많이 읽을 때 어떻게 정리할지도 마지막에 다룹니다.</p>
+
+<!-- ========== 1 ========== -->
+<h2>1. 지금 읽는 중이라면 — 오늘부터 할 것</h2>
+<p>이미 절반쯤 읽었다면 처음부터 다시 정리할 필요는 없습니다. 아래 순서로 <strong>10분만 써서 지나온 부분을 복구</strong>하고, 남은 부분부터 새 방식으로 읽으면 됩니다.</p>
+
+<h3>지나온 부분 복구 (10분)</h3>
+<ol>
+  <li>목차를 펴고, 이미 읽은 장마다 <strong>한 줄</strong>씩만 씁니다. "저자는 ___라고 했다." 기억이 안 나는 장은 "기억 안 남"이라고 쓰고 넘어갑니다. 그 장은 나중에 훑을 후보일 뿐, 지금 다시 읽지 않습니다.</li>
+  <li>밑줄 그은 곳이 있으면 그중 <strong>가장 인상 깊은 문장 하나</strong>만 페이지와 함께 옮겨 적습니다.</li>
+  <li>이 자료의 <strong>핵심 질문</strong>이 무엇인지 한 줄 씁니다. 책이면 서문·1장에, 논문이면 서론 끝에 대개 있습니다. 확실치 않으면 "아마 ___?" 라고 물음표를 달아 둡니다. 남은 부분을 읽으며 확인하는 것이 곧 읽기의 목표가 됩니다.</li>
+</ol>
+
+<h3>남은 부분 읽는 방식</h3>
+<ul>
+  <li><strong>책</strong>: 장이 끝날 때마다 3줄(저자 주장 / 근거 / 내 반응). 기호는 <code>★</code> 핵심, <code>?</code> 의문·반대, <code>→</code> 적용 세 개만.</li>
+  <li><strong>논문</strong>: 남은 부분이 결과·논의라면, 그림과 표를 <em>본문 설명 없이</em> 먼저 해석해 보고 본문과 비교합니다. 다르게 읽힌 지점이 바로 모임에서 물어볼 거리입니다. 모르는 용어는 그 자리에서 찾지 말고 목록에 모읍니다.</li>
+  <li><strong>공통</strong>: 읽다가 "이건 말하고 싶다"는 생각이 들면 그 자리에서 <mark>말이 아니라 질문 형태로</mark> 적어 둡니다. "저자는 A라고 하는데, B의 경우엔 어떻게 될까?" 이 습관이 3절의 발언 방식으로 이어집니다.</li>
+</ul>
+
+<!-- ========== 2 ========== -->
+<h2>2. 준비 자료는 "카드 한 장"이면 된다</h2>
+<p>참여자의 준비물은 발제자와 다릅니다. 배포용 요약본이 아니라, <strong>내가 모임에서 무엇을 듣고 무엇을 물을지 정해 둔 카드 한 장</strong>입니다. 독서카드함의 항목 순서가 이미 그 흐름이므로, 모임 전에 아래 칸을 채우면 준비는 끝입니다. 각 칸은 <strong>3줄 이내</strong>가 기준입니다. 길게 쓰면 모임에서 그걸 다 말하고 싶어집니다.</p>
+
+<div class="tpl">
+<h4>모임 전에 채우는 독서카드함 항목</h4>
+<div class="row"><div class="k">핵심질문과 저자의 답</div><div class="v">"저자는 ___라는 질문에 ___라고 답한다." 두 문장. 논문이면 연구 질문과 주요 결과. 이 칸이 비어 있으면 아직 준비가 안 된 것</div></div>
+<div class="row"><div class="k">기존 지식과의 차이점</div><div class="v">이 주제에 대해 이미 알려진 것 → 이 자료가 맞추려는 조각 → 그게 왜 중요한가. 책이면 저자가 기대거나 반박하는 사상·사상가 이름</div></div>
+<div class="row"><div class="k">전개 방식 살펴보기</div><div class="v">책: 장을 3~4덩어리로 묶은 흐름. 논문: 참여자·설계·측정·분석을 각 한 줄. 모임에서 "그 부분이 어디였죠?"에 바로 답하기 위한 칸</div></div>
+<div class="row"><div class="k">타당성 확인</div><div class="v">논문: 표본·측정 도구·다른 해석 가능성·우리 상황에서의 성립 여부. 책: 근거가 경험담인지 자료인지, 반례가 떠오르는지. 모임 전엔 비워 두어도 됨</div></div>
+<div class="row"><div class="k">내 생각</div><div class="v"><strong>질문 3개로만</strong> 씁니다. 이해 질문 1(같은 뜻으로 읽었나), 비판 질문 1(빈틈은 어디인가), 적용 질문 1(우리 현장이라면). 주장이 아니라 질문으로 적는 것이 이 칸의 규칙</div></div>
+<div class="row"><div class="k">모임에서 나온 의견</div><div class="v">모임 전엔 비워 둠. 4절에서 채움</div></div>
+<div class="row"><div class="k">인상 깊은 문장</div><div class="v">페이지와 함께 2~3개. 그중 <em>모임에서 낭독할 하나</em>에 표시. 참여자가 말할 가장 안전하고 가장 환영받는 발언은 "이 문장이 좋았어요, ___쪽"</div></div>
+<div class="row"><div class="k">태그</div><div class="v">주제어 2~3개 + 모임 이름(예: 책모임, 논문모임) + 연월. 나중에 책과 논문을 서로 잇는 열쇠</div></div>
+</div>
+
+<div class="note">
+<p><strong>책 카드와 논문 카드의 무게중심</strong></p>
+<p>책 카드는 "핵심질문과 저자의 답"과 "내 생각"이 무겁고, 논문 카드는 "전개 방식"과 "타당성 확인"이 무겁습니다. 책은 <em>저자의 주장을 내가 어떻게 받아들였나</em>, 논문은 <em>이 결론을 믿어도 되나</em>가 토론의 축이기 때문입니다.</p>
+</div>
+
+<h3>모임 당일 손에 드는 것</h3>
+<p>카드 전체를 들고 가면 그걸 다 말하게 됩니다. 종이 한 장 또는 휴대폰 메모에 <strong>질문 3개와 낭독할 문장 1개</strong>만 옮겨 적어 갑니다. 나머지는 머릿속에 있으면 됩니다. 그리고 그 종이를 반으로 접어, 오른쪽 절반은 비워 둡니다. 이 빈 공간이 3절의 도구입니다.</p>
+
+<!-- ========== 3 ========== -->
+<h2>3. 말을 아끼는 참여법 — 듣기를 일로 만든다</h2>
+<p>말이 많은 사람에게 "참아라"는 잘 통하지 않습니다. 참는 것은 에너지가 들고, 결국 터집니다. 대신 <strong>입을 다무는 대신 손을 바쁘게</strong> 만드는 쪽이 오래갑니다. 듣는 동안 할 일이 있으면 말할 틈이 자연스럽게 줄어듭니다.</p>
+
+<figure>
+<div class="svg-wrap">
+<svg viewBox="0 0 700 260" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="발언 전 네 단계">
+  <defs><marker id="a" markerWidth="8" markerHeight="8" refX="4" refY="4" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="var(--ink-2)"/></marker></defs>
+  <rect x="20" y="40" width="140" height="80" rx="8" fill="var(--teal-soft)" stroke="var(--teal)"/>
+  <text x="90" y="72" text-anchor="middle" font-size="14" font-weight="700" class="svg-t">듣는다</text>
+  <text x="90" y="95" text-anchor="middle" font-size="11" class="svg-s">끝까지, 끊지 않고</text>
+  <path d="M160 80 L188 80" stroke="var(--ink-2)" stroke-width="2" marker-end="url(#a)"/>
+  <rect x="190" y="40" width="140" height="80" rx="8" fill="var(--teal-soft)" stroke="var(--teal)"/>
+  <text x="260" y="72" text-anchor="middle" font-size="14" font-weight="700" class="svg-t">적는다</text>
+  <text x="260" y="95" text-anchor="middle" font-size="11" class="svg-s">누가 · 무엇을 · 한 줄</text>
+  <path d="M330 80 L358 80" stroke="var(--ink-2)" stroke-width="2" marker-end="url(#a)"/>
+  <rect x="360" y="40" width="140" height="80" rx="8" fill="var(--moss-soft)" stroke="var(--moss)"/>
+  <text x="430" y="72" text-anchor="middle" font-size="14" font-weight="700" class="svg-t">5초 센다</text>
+  <text x="430" y="95" text-anchor="middle" font-size="11" class="svg-s">다른 사람이 말하면 양보</text>
+  <path d="M500 80 L528 80" stroke="var(--ink-2)" stroke-width="2" marker-end="url(#a)"/>
+  <rect x="530" y="40" width="150" height="80" rx="8" fill="var(--mark)"/>
+  <text x="605" y="72" text-anchor="middle" font-size="14" font-weight="700" class="svg-t">질문으로 말한다</text>
+  <text x="605" y="95" text-anchor="middle" font-size="11" class="svg-t">한 번에 한 문장</text>
+  <!-- 발언 예산 -->
+  <text x="350" y="165" text-anchor="middle" font-size="13" class="svg-t">한 모임의 발언 예산</text>
+  <g transform="translate(180,185)">
+    <rect x="0" y="0" width="100" height="40" rx="6" fill="var(--paper)" stroke="var(--line)"/>
+    <text x="50" y="25" text-anchor="middle" font-size="12" class="svg-s">첫인상 1분</text>
+    <rect x="110" y="0" width="100" height="40" rx="6" fill="var(--paper)" stroke="var(--line)"/>
+    <text x="160" y="25" text-anchor="middle" font-size="12" class="svg-s">질문 3개</text>
+    <rect x="220" y="0" width="120" height="40" rx="6" fill="var(--paper)" stroke="var(--line)"/>
+    <text x="280" y="25" text-anchor="middle" font-size="12" class="svg-s">낭독 1 + 마무리 1</text>
+  </g>
+  <text x="350" y="250" text-anchor="middle" font-size="12" class="svg-s">예산을 다 쓰면 그날은 듣기만. 다 못 써도 괜찮다.</text>
+</svg>
+</div>
+<figcaption>말하고 싶은 순간마다 이 네 칸을 지난다. 대개 3번째 칸에서 끝난다.</figcaption>
+</figure>
+
+<h3>구체적인 장치 다섯 가지</h3>
+<ol>
+  <li><strong>발언 예산을 정해 간다.</strong> 첫인상 1분, 준비한 질문 3개, 낭독 1번, 마무리 한 줄. 이렇게 <mark>여섯 번</mark>이 그날의 전부입니다. 즉흥 발언은 이 여섯 번에서 빼 쓰는 것이므로, 즉흥으로 말하면 준비한 질문 하나를 포기해야 합니다. 이 교환 조건이 말을 고르게 만듭니다.</li>
+  <li><strong>주장 대신 질문으로 말한다.</strong> "저는 이렇게 생각해요"를 "___라고 볼 수도 있을까요?"로 바꿉니다. 같은 내용이지만 다른 사람이 이어받을 자리가 생기고, 내 발언이 짧아집니다. 준비 단계에서 "내 생각" 칸을 질문으로만 채운 이유입니다.</li>
+  <li><strong>한 번에 한 문장.</strong> 말하고 나서 "그리고 또…"가 나오려 하면 멈춥니다. 나머지는 접은 종이 오른쪽에 적습니다. 모임 후 카드에 넣을 재료가 됩니다. 말하지 않은 것은 사라지는 게 아니라 <em>저장</em>되는 것입니다.</li>
+  <li><strong>다른 사람의 말을 한 줄씩 받아 적는다.</strong> 접은 종이의 오른쪽 빈칸에 "누가 · 무엇을"만 적습니다. 완벽하게 받아쓰려 하지 말고, 내 생각과 <em>다른</em> 말만 적습니다. 같은 말은 적을 필요가 없습니다. 이 메모가 4절의 "모임에서 나온 의견"이 됩니다.</li>
+  <li><strong>이어 말하기로 시작한다.</strong> 말할 때는 앞사람 말을 한 구절 받아서 시작합니다. "방금 ___ 말씀하신 것과 이어서요." 이러면 내가 들었다는 게 드러나고, 발언이 대화가 됩니다. 앞사람과 무관한 새 주제를 꺼내는 것은 발언 예산에서 두 배로 칩니다.</li>
+</ol>
+
+<div class="warn">
+<p><strong>가장 효과가 큰 방법 하나</strong></p>
+<p>모임에 "제가 오늘 기록을 맡을게요"라고 자원하는 것입니다. 기록자는 말할 틈이 줄고, 모두의 의견을 가장 잘 듣게 되며, 모임 후 정리도 자연스럽게 내 몫이 됩니다. 말이 많은 사람의 에너지를 가장 생산적으로 쓰는 자리입니다. 다른 분들이 다 잘하신다면 더욱, 기록으로 기여하는 쪽이 존재감을 만드는 길이기도 합니다.</p>
+</div>
+
+<!-- ========== 4 ========== -->
+<h2>4. 모임 후 — 15분 안에 카드를 닫는다</h2>
+<p>모임 직후 15분이 이 문서 전체에서 가장 중요한 시간입니다. 집에 가서 하면 절반이 사라집니다. 카페에 남거나, 이동 중에 휴대폰으로라도 아래 세 칸을 채웁니다.</p>
+
+<div class="tpl">
+<h4>모임 후에 채우는 항목</h4>
+<div class="row"><div class="k">모임에서 나온 의견</div><div class="v">접은 종이 오른쪽 메모를 옮깁니다. 규칙 두 가지. ① 누가 말했는지보다 <em>어떤 관점</em>이었는지로 씁니다("교육 현장에서 보면 ___라는 시각"). ② 내 생각과 달랐던 것부터 씁니다. 동의한 것은 짧게</div></div>
+<div class="row"><div class="k">내 생각 (수정)</div><div class="v">기존 "내 생각" 칸 아래에 줄을 긋고 "모임 후:"로 시작해 씁니다. 바뀐 것, 확신이 커진 것, 새로 생긴 질문. 원래 쓴 것은 지우지 않습니다. 변화가 곧 기록</div></div>
+<div class="row"><div class="k">타당성 확인</div><div class="v">모임에서 다른 사람이 짚어 준 빈틈이나 반례를 여기에 추가</div></div>
+<div class="row"><div class="k">핵심질문과 저자의 답</div><div class="v">한 번 더 읽고, 필요하면 고쳐 씁니다. 모임 후엔 대개 문장이 더 짧아집니다</div></div>
+<div class="row"><div class="k">별점 · 완독일</div><div class="v">완독일을 채워 "읽는 중"을 끝냅니다</div></div>
+</div>
+
+<h3>말하지 않은 것의 행방</h3>
+<p>발언 예산 때문에 말하지 못한 생각들이 접은 종이 오른쪽에 남아 있을 것입니다. 이것을 버리지 말고 "내 생각 (수정)" 칸 끝에 <strong>"못 한 말:"</strong>이라는 꼬리표로 붙입니다. 한 달 뒤 이 꼬리표들만 모아 읽어 보면, 내가 정말 하고 싶은 말이 무엇이었는지가 보입니다. 그중 하나는 다음 달 모임의 첫 질문이 됩니다. 이렇게 하면 말을 아끼는 것이 손해가 아니라 <em>다음 달 준비</em>가 됩니다.</p>
+
+<h3>실행 하나</h3>
+<p>적용 질문에 대한 답 중 이번 달에 실제로 해 볼 것 하나를 골라 "언제, 어디서"까지 씁니다. 다음 달 모임 첫인상 1분에 그 결과를 말하면, 그날의 첫 발언이 준비되어 있는 셈이라 즉흥 발언이 줄어듭니다.</p>
+
+<!-- ========== 5 ========== -->
+<h2>5. 평소 독서 — 모든 책을 같은 깊이로 정리하지 않는다</h2>
+<p>책을 많이 읽는 사람이 정리에서 헤매는 이유는 대개 하나입니다. <strong>모든 책에 같은 정리를 하려 하기 때문</strong>입니다. 그러면 정리가 밀리고, 밀린 정리가 쌓이면 아예 안 하게 됩니다. 책마다 깊이를 다르게 정하고, 그 깊이를 <em>읽기 시작할 때</em> 정하면 헤맴이 줄어듭니다.</p>
+
+<figure>
+<div class="svg-wrap">
+<svg viewBox="0 0 700 300" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="독서 깊이 세 단계">
+  <rect x="20" y="20" width="660" height="70" rx="8" fill="var(--paper)" stroke="var(--line)"/>
+  <text x="40" y="46" font-size="14" font-weight="700" class="svg-t">훑는 책 — 카드 없음</text>
+  <text x="40" y="68" font-size="12" class="svg-s">색인에 한 줄(제목 · 한 문장 · 날짜)만. 대부분의 책이 여기. 죄책감 없이 놓아 준다.</text>
+  <rect x="20" y="105" width="660" height="80" rx="8" fill="var(--moss-soft)" stroke="var(--moss)"/>
+  <text x="40" y="131" font-size="14" font-weight="700" class="svg-t">남기는 책 — 짧은 카드</text>
+  <text x="40" y="153" font-size="12" class="svg-s">핵심질문과 저자의 답 + 인상 깊은 문장 2~3개(페이지) + 태그 + 별점. 15분.</text>
+  <text x="40" y="171" font-size="12" class="svg-s">"누군가에게 이 책 이야기를 할 것 같다"면 여기.</text>
+  <rect x="20" y="200" width="660" height="80" rx="8" fill="var(--mark)"/>
+  <text x="40" y="226" font-size="14" font-weight="700" class="svg-t">깊이 읽는 책 — 전체 카드</text>
+  <text x="40" y="248" font-size="12" class="svg-t">2절의 항목 전부. 스터디 책, 논문, 내 일과 직결된 책. 한 달에 두세 권을 넘기지 않는다.</text>
+  <text x="40" y="266" font-size="12" class="svg-t">읽는 중 장별 3줄 메모가 붙는 건 이 단계뿐.</text>
+</svg>
+</div>
+<figcaption>깊이는 읽기 시작할 때 정하고, 읽다가 마음이 바뀌면 한 단계만 올린다.</figcaption>
+</figure>
+
+<h3>깊이를 정하는 질문</h3>
+<p>책을 펴기 전에 하나만 묻습니다. <mark>"이 책을 다 읽고 나서 누군가에게 설명할 일이 있는가?"</mark> 없으면 훑는 책, 있을지도 모르면 남기는 책, 확실히 있으면(스터디, 수업, 글쓰기) 깊이 읽는 책입니다. 재미로 읽는 소설은 대개 훑는 책이고, 그래도 괜찮습니다. 독서카드함이 비어 있는 책이 많다고 해서 덜 읽은 것이 아닙니다.</p>
+
+<h3>남기는 책의 15분 카드</h3>
+<p>다 읽은 날 잠들기 전, 또는 다음 날 아침에 15분. 이 시간을 넘기면 카드가 없어도 됩니다. 순서는 이렇습니다.</p>
+<ol>
+  <li>밑줄·귀접기 한 곳을 훑어 문장 2~3개를 페이지와 함께 옮긴다 (7분)</li>
+  <li>"저자는 ___라는 질문에 ___라고 답한다" 두 문장 (5분)</li>
+  <li>태그 2~3개, 별점, 완독일 (3분)</li>
+</ol>
+<p>"내 생각"은 쓰고 싶을 때만 씁니다. 안 쓴다고 카드가 미완성이 아닙니다.</p>
+
+<h3>카드끼리 잇는 법 — 태그 규칙 하나</h3>
+<p>정리가 쌓여도 다시 안 보게 되는 이유는 카드가 서로 <em>고립</em>되어 있기 때문입니다. 태그를 세 종류로 고정하면 나중에 카드함에서 한 번에 모아 볼 수 있습니다.</p>
+<div class="table-wrap">
+<table>
+<tr><th style="width:110px">종류</th><th>예시</th><th>쓰임</th></tr>
+<tr><td>주제어</td><td><code>자기결정</code> <code>행동중재</code> <code>읽기유창성</code></td><td>몇 달 뒤 "이 주제로 뭘 읽었지?"에 답한다. 책과 논문이 여기서 만난다</td></tr>
+<tr><td>맥락</td><td><code>책모임</code> <code>논문모임</code> <code>수업준비</code></td><td>어떤 이유로 읽었는지. 스터디 카드만 모아 보기</td></tr>
+<tr><td>시기</td><td><code>2026-09</code></td><td>월별로 돌아보기</td></tr>
+</table>
+</div>
+<p>주제어는 <strong>새로 만들기 전에 기존 태그를 먼저 찾아 씁니다.</strong> 비슷한 태그가 두 개 생기면 잇기가 끊어집니다. 한 달에 한 번, 카드함에서 주제어 태그 목록을 보며 겹치는 것을 합칩니다.</p>
+
+<h3>월 1회 20분 — 카드함 훑기</h3>
+<p>매달 마지막 주에 카드함을 열어 그 달의 카드를 위에서 아래로 훑습니다. 정리를 다시 하는 게 아니라 <strong>"핵심질문과 저자의 답"과 "못 한 말" 꼬리표만</strong> 읽습니다. 같은 주제어가 두 번 이상 나오면 그 주제가 지금 나의 관심이라는 뜻이고, 다음 달 책·논문 후보를 고를 때 그 주제어로 고릅니다. 이렇게 하면 읽기가 흩어지지 않고 방향이 생깁니다.</p>
+
+<!-- ========== 6 ========== -->
+<h2>6. 나중에 독서카드함과 연동하려면 — 지금부터 맞춰 둘 것</h2>
+<p>지금은 메모 앱이나 종이에 쓰더라도, 아래 세 가지만 지키면 나중에 카드로 옮길 때 복사·붙여넣기로 끝납니다.</p>
+<ul>
+  <li><strong>항목 이름을 카드함과 똑같이 쓴다.</strong> 메모의 소제목을 <code>핵심질문과 저자의 답</code>, <code>기존 지식과의 차이점</code>, <code>전개 방식 살펴보기</code>, <code>타당성 확인</code>, <code>내 생각</code>, <code>모임에서 나온 의견</code>, <code>인상 깊은 문장</code>, <code>태그</code>로 고정합니다. 이름이 같으면 옮길 때 판단할 일이 없습니다.</li>
+  <li><strong>인상 깊은 문장은 항상 "문장 — p.쪽수" 형식.</strong> 카드함이 문장과 페이지를 따로 저장하므로, 지금부터 페이지를 빠뜨리지 않으면 나중에 나눠 넣기만 하면 됩니다.</li>
+  <li><strong>태그는 쉼표로 구분한 한 줄.</strong> 카드함의 태그 입력 방식과 같습니다.</li>
+</ul>
+<p>한 가지 더. 지금 읽는 중인 책과 논문은 오늘 <strong>카드함에 "읽는 중" 카드부터 만들어</strong> 두는 것이 좋습니다. 제목·저자·읽기 시작일만 넣고 완독일은 비워 둡니다. 1절에서 복구한 한 줄들과 문장 하나를 넣으면, 이번 달 스터디 준비는 이미 카드함 안에서 시작된 셈입니다.</p>
+
+<!-- ========== 7 ========== -->
+<h2>7. 이번 달 체크리스트</h2>
+<p><strong>오늘</strong></p>
+<ul class="check">
+  <li>읽는 중인 책·논문의 지나온 부분을 10분 복구했다 (장별 한 줄, 문장 하나, 핵심 질문)</li>
+  <li>카드함에 "읽는 중" 카드 두 장을 만들었다</li>
+</ul>
+<p><strong>스터디 2~3일 전</strong></p>
+<ul class="check">
+  <li>카드의 "핵심질문과 저자의 답"이 두 문장으로 있다</li>
+  <li>"내 생각"이 질문 3개(이해·비판·적용)로 되어 있다</li>
+  <li>낭독할 문장 하나에 표시했다</li>
+  <li>종이 한 장에 질문 3개 + 문장 1개를 옮기고 반으로 접었다</li>
+</ul>
+<p><strong>스터디 당일</strong></p>
+<ul class="check">
+  <li>발언 예산 여섯 번을 기억하고 들어간다</li>
+  <li>기록을 자원할지 정했다</li>
+  <li>접은 종이 오른쪽에 나와 다른 의견을 한 줄씩 적었다</li>
+</ul>
+<p><strong>스터디 직후 15분</strong></p>
+<ul class="check">
+  <li>"모임에서 나온 의견"을 관점 단위로 옮겼다</li>
+  <li>"내 생각" 아래에 "모임 후:"와 "못 한 말:"을 붙였다</li>
+  <li>실행 하나를 언제·어디서까지 정했다</li>
+  <li>완독일과 별점을 채웠다</li>
+</ul>
+<p><strong>월말 20분</strong></p>
+<ul class="check">
+  <li>이달 카드의 핵심 답과 "못 한 말"만 훑었다</li>
+  <li>겹치는 주제어 태그를 합쳤다</li>
+  <li>다음 달 후보를 반복된 주제어로 골랐다</li>
+</ul>
+
+<div class="note" style="margin-top:48px">
+<p><strong>딱 하나만 바꾼다면</strong></p>
+<p>"내 생각" 칸을 주장이 아니라 <em>질문</em>으로 쓰는 것입니다. 준비가 짧아지고, 모임에서 말이 줄고, 다른 사람의 답이 카드에 쌓입니다. 나머지 장치는 이 하나가 익숙해진 뒤에 붙여도 늦지 않습니다.</p>
+</div>
+
+<p style="margin-top:56px;font-size:.85rem;color:var(--ink-2);border-top:1px solid var(--line);padding-top:14px">독서카드함 함께 쓰는 안내 문서. 카드의 항목 이름과 같은 순서로 쓰여 있어, 읽으면서 바로 카드를 채울 수 있습니다.</p>
+</main>
+</body>
+</html>
