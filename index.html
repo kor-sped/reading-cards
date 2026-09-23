@@ -87,6 +87,20 @@
     border:1.5px solid var(--rule); border-radius:6px; background:var(--paper); color:var(--ink-soft);
   }
 
+  /* ── 통계 요약 (내 서재) ── */
+  .stats{margin:-4px 0 16px; border:1px solid var(--rule); border-radius:6px; background:var(--paper);}
+  .stats-head{
+    display:flex; justify-content:space-between; align-items:center; width:100%;
+    padding:10px 14px; border:none; background:none; font-size:.85rem; color:var(--ink); text-align:left;
+  }
+  .stats-head .arrow{color:var(--ink-soft); font-size:.75rem;}
+  .stats-body{padding:0 14px 12px; font-size:.8rem; color:var(--ink-soft);}
+  .stats-body h4{margin:10px 0 6px; font-size:.78rem; font-weight:600; color:var(--ink);}
+  .stat-row{display:grid; grid-template-columns:3.4em 1fr 2.6em; gap:8px; align-items:center; margin:4px 0;}
+  .stat-bar{height:8px; border-radius:4px; background:var(--room); overflow:hidden;}
+  .stat-bar span{display:block; height:100%; background:var(--shelf);}
+  .stat-row .n{text-align:right;}
+
   /* ── 카드 목록 ── */
   .cards{display:grid; gap:14px;}
   .card{
@@ -282,7 +296,7 @@
   /* ── 인쇄: 카드 내용만 종이에 출력 ── */
   @media print{
     body{background:#fff; padding:0;}
-    header, .actions, #logoutBtn, .pin-toggle{display:none !important;}
+    header, .actions, #logoutBtn, .pin-toggle, .stats{display:none !important;}
     .wrap{max-width:none; padding:0;}
     #viewDetail .sheet{border:none; box-shadow:none; padding:0;}
     .detail blockquote{page-break-inside:avoid;}
@@ -358,6 +372,7 @@
         <option>책</option><option>논문</option><option>기타</option>
       </select>
     </div>
+    <div class="stats" id="stats"></div>
     <div class="cards" id="cards"></div>
     <div class="empty hidden" id="emptyMsg"></div>
     <div class="footer-tools" id="footerTools">
@@ -730,6 +745,7 @@ function esc(s){ const d=document.createElement('div'); d.textContent=s||''; ret
 function stars(n){ return '★'.repeat(n) + '☆'.repeat(5-n); }
 
 function render(){
+  renderStats();
   const q = document.getElementById('search').value.trim().toLowerCase();
   const tf = document.getElementById('typeFilter').value;
   let list = tabMode==='mine' ? [...cache] : [...publicCache];
@@ -778,6 +794,42 @@ function render(){
     : tabMode==='mine'
       ? '아직 카드가 없습니다.<br>「＋ 새 카드」를 눌러 첫 번째 기록을 남겨 보세요.'
       : '아직 공개된 카드가 없습니다.<br>카드를 저장할 때 「모두의 서재에 공개」를 켜면 여기에 나타납니다.';
+}
+
+/* ── 통계 요약: 내 카드 전체 기준. 필터·검색과 무관. 연도는 end_date 기준 ── */
+let statsOpen = false;
+try{ statsOpen = localStorage.getItem('rc_stats_open')==='1'; }catch(e){}
+function toggleStats(){
+  statsOpen = !statsOpen;
+  try{ localStorage.setItem('rc_stats_open', statsOpen?'1':'0'); }catch(e){}
+  renderStats();
+}
+function renderStats(){
+  const box = document.getElementById('stats');
+  if(tabMode!=='mine' || !cache.length){ box.classList.add('hidden'); return; }
+  box.classList.remove('hidden');
+  const thisYear = String(new Date().getFullYear());
+  const done = cache.filter(c=>c.end);
+  const byYear = {};
+  done.forEach(c=>{ const y=String(c.end).slice(0,4); byYear[y]=(byYear[y]||0)+1; });
+  const years = Object.keys(byYear).sort().reverse();
+  const byType = {'책':0,'논문':0,'기타':0};
+  cache.forEach(c=>{ const t = byType.hasOwnProperty(c.type) ? c.type : '기타'; byType[t]++; });
+  const row = (label, n, max) => `<div class="stat-row"><span>${esc(label)}</span>
+    <div class="stat-bar"><span style="width:${max?Math.round(n/max*100):0}%"></span></div><span class="n">${n}</span></div>`;
+  const yMax = Math.max(0, ...years.map(y=>byYear[y]));
+  const tMax = Math.max(...Object.values(byType));
+  box.innerHTML = `
+    <button class="stats-head" onclick="toggleStats()" aria-expanded="${statsOpen}">
+      <span>올해 완독 <b>${byYear[thisYear]||0}</b>권 · 읽는 중 <b>${cache.length-done.length}</b>권 · 전체 <b>${cache.length}</b>권</span>
+      <span class="arrow">${statsOpen?'접기 ▲':'자세히 ▼'}</span>
+    </button>
+    ${statsOpen ? `<div class="stats-body">
+      <h4>연도별 완독</h4>
+      ${years.length ? years.map(y=>row(y, byYear[y], yMax)).join('') : '<p>아직 완독한 카드가 없습니다.</p>'}
+      <h4>유형별</h4>
+      ${Object.keys(byType).map(t=>row(t, byType[t], tMax)).join('')}
+    </div>` : ''}`;
 }
 
 async function switchTab(mode){
