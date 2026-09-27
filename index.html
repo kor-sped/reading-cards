@@ -96,7 +96,7 @@
   .stats-head .arrow{color:var(--ink-soft); font-size:.75rem;}
   .stats-body{padding:0 14px 12px; font-size:.8rem; color:var(--ink-soft);}
   .stats-body h4{margin:10px 0 6px; font-size:.78rem; font-weight:600; color:var(--ink);}
-  .stat-row{display:grid; grid-template-columns:3.4em 1fr 2.6em; gap:8px; align-items:center; margin:4px 0;}
+  .stat-row{display:grid; grid-template-columns:4.6em 1fr 2.6em; gap:8px; align-items:center; margin:4px 0;}
   .stat-bar{height:8px; border-radius:4px; background:var(--room); overflow:hidden;}
   .stat-bar span{display:block; height:100%; background:var(--shelf);}
   .stat-row .n{text-align:right;}
@@ -247,6 +247,24 @@
   .check{display:flex; align-items:center; gap:8px; font-size:.88rem; margin-bottom:16px;}
   .check input{width:18px; height:18px; accent-color:var(--shelf);}
 
+  /* ── 읽는 깊이 · 장별 메모 ── */
+  .depth-pick{display:flex; gap:6px; flex-wrap:wrap;}
+  .depth-pick button{padding:7px 12px; font-size:.84rem; border-color:var(--rule); color:var(--ink-soft);}
+  .depth-pick button.on{background:var(--shelf); color:var(--paper); border-color:var(--shelf);}
+  #depthHint{margin:8px 0 0;}
+  .folded{display:none !important;}
+  .unfold-bar{margin:-4px 0 16px;}
+  .unfold-bar button{font-size:.8rem; padding:6px 12px;}
+  .ch-list{display:grid; gap:10px; margin-bottom:8px;}
+  .ch-item{border:1.5px solid var(--rule); border-radius:6px; padding:10px; background:rgba(65,87,63,.03);}
+  .ch-head{display:flex; gap:8px; margin-bottom:6px;}
+  .ch-head input{flex:1; font-weight:600;}
+  .ch-item textarea{min-height:40px !important; margin-top:6px;}
+  .detail .chapter{margin:10px 0 14px;}
+  .detail .chapter h4{font-size:.9rem; font-weight:700; margin-bottom:4px;}
+  .detail .chapter p{margin:2px 0;}
+  .detail .chapter .k{font-size:.72rem; font-weight:600; color:var(--shelf); margin-right:6px;}
+
   /* ── 로그인 / 닉네임 ── */
   #viewAuth, #viewNick{max-width:400px; margin:40px auto 0;}
   .social-divider{
@@ -376,6 +394,11 @@
         <option value="">모든 유형</option>
         <option>책</option><option>논문</option><option>기타</option>
       </select>
+      <select id="depthFilter" aria-label="읽는 깊이 필터">
+        <option value="">모든 깊이</option>
+        <option value="훑는">훑는</option><option value="남기는">남기는</option>
+        <option value="깊이">깊이 읽는</option><option value="none">미정</option>
+      </select>
     </div>
     <div class="stats" id="stats"></div>
     <div class="cards" id="cards"></div>
@@ -408,6 +431,11 @@
           <option>책</option><option>논문</option><option>기타</option>
         </select>
       </div>
+      <div class="field">
+        <label>읽는 깊이</label>
+        <div class="depth-pick" id="depthPick" role="radiogroup" aria-label="읽는 깊이"></div>
+        <div class="hint" id="depthHint">다 읽고 누군가에게 설명할 일이 있나요? 없으면 <b>훑는</b>, 있을지도 모르면 <b>남기는</b>, 확실히 있으면(스터디·수업·글쓰기) <b>깊이 읽는</b>. 비워 두면 모든 칸이 보여요.</div>
+      </div>
       <div class="field"><label for="fTitle">제목 *</label><input id="fTitle" placeholder="예: 데미안 / 논문 제목"></div>
       <div class="row">
         <div class="field"><label for="fAuthor">저자</label><input id="fAuthor" placeholder="예: 헤르만 헤세 / 제1저자"></div>
@@ -417,12 +445,12 @@
         <div class="field"><label for="fStart">읽기 시작</label><input id="fStart" type="date"></div>
         <div class="field"><label for="fEnd" id="lblEnd">완독일 (비우면 ‘읽는 중’)</label><input id="fEnd" type="date"></div>
       </div>
-      <div class="field">
+      <div class="field" data-depth-key="rating">
         <label>별점</label>
         <div class="rating-pick" id="ratingPick" role="radiogroup" aria-label="별점"></div>
       </div>
 
-      <div class="guide">
+      <div class="guide" data-depth-key="guide">
         <div class="guide-title">전반적인 개요 살펴보기</div>
         <ul>
           <li id="guide_책"><b>책</b> — 차례로 논지의 흐름을 파악하고, 각 장마다 <em>“이 장이 전체에서 하는 역할은?”</em>을 내 말로 한 문장.</li>
@@ -431,15 +459,26 @@
         </ul>
       </div>
 
+      <div class="field" data-depth-key="chapters">
+        <label id="lblCh">장별 메모</label>
+        <div class="hint" id="hintCh"></div>
+        <div class="ch-list" id="chList"></div>
+        <button class="ghost" type="button" id="addChBtn" onclick="addChapterRow()">＋ 장 추가</button>
+      </div>
+
       <div id="deepSections"></div>
 
-      <div class="field">
+      <div class="field" data-depth-key="quotes">
         <label>인상 깊은 문장</label>
         <div class="quote-list" id="quoteList"></div>
         <button class="ghost" type="button" onclick="addQuoteRow()">＋ 문장 추가</button>
       </div>
 
       <div class="field"><label for="fTags">태그 (쉼표로 구분)</label><input id="fTags" placeholder="예: 성장, 2026, 스터디"></div>
+
+      <div class="unfold-bar hidden" id="unfoldBar">
+        <button class="ghost" type="button" onclick="unfoldAll()"></button>
+      </div>
 
       <label class="check">
         <input type="checkbox" id="fPublic" checked>
@@ -487,7 +526,9 @@ const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 const FORM_KEYS = ['core','gap','method','validity','thoughts','group'];
 const META = {
   '책': {
-    stamp:'완독', endLabel:'완독일 (비우면 ‘읽는 중’)',
+    stamp:'완독', endLabel:'완독일 (비우면 ‘읽는 중’)', noun:'책',
+    chLabel:'장별 메모', chAdd:'＋ 장 추가', chTitle:'예: 3장 읽기의 과학',
+    chHint:'장이 끝날 때마다 3줄. 기호는 ★ 핵심 · ? 의문·반대 · → 적용.',
     catLabel:'분야 및 출판사(연도)', catHint:'예: 소설 / 민음사(2020)',
     core:    {label:'핵심질문과 저자의 답',      hint:'저자가 답하려는 중심 질문은? 에세이라면 글의 목적이나 의도, 소설이라면 작가가 이 이야기로 말하려는 것.'},
     gap:     {label:'기존 지식과의 차이점',      hint:'① 이 주제에 대해 이미 알려진 것은? ② 이 책은 퍼즐의 어떤 조각을 맞추려 하는가? ③ 그 간극을 메우는 것이 왜 중요한가? · 책에 담긴 사상과 사상가도 함께 적어보세요.'},
@@ -499,7 +540,9 @@ const META = {
     group:   {label:'모임에서 나온 의견',        hint:'다른 사람들의 의견, 독서 모임에서 나온 이야기'}
   },
   '논문': {
-    stamp:'완료', endLabel:'다 읽은 날 (비우면 ‘읽는 중’)',
+    stamp:'완료', endLabel:'다 읽은 날 (비우면 ‘읽는 중’)', noun:'논문',
+    chLabel:'부분별 메모', chAdd:'＋ 부분 추가', chTitle:'예: 방법',
+    chHint:'서론·방법·결과·논의마다 한 줄씩. 결과는 그림·표 먼저.',
     catLabel:'출처', catHint:'예: Nature 615(7951), 2023 / DOI',
     core:    {label:'연구 문제 또는 핵심 질문',  hint:'주로 서론의 끝부분에 있습니다. 이 연구가 답하려는 질문은?'},
     gap:     {label:'기존 지식과의 차이점',      hint:'① 이 주제에 대해 이미 알려진 사실은? ② 이 논문은 퍼즐의 어떤 조각을 맞추려 하는가? ③ 이 간극을 메우는 것이 왜 중요한가?'},
@@ -511,7 +554,9 @@ const META = {
     group:   {label:'모임에서 나온 의견',        hint:'논문 읽기 모임에서 나온 다른 사람들의 의견'}
   },
   '기타': {
-    stamp:'완료', endLabel:'다 읽은 날 (비우면 ‘읽는 중’)',
+    stamp:'완료', endLabel:'다 읽은 날 (비우면 ‘읽는 중’)', noun:'글',
+    chLabel:'부분별 메모', chAdd:'＋ 부분 추가', chTitle:'예: 첫째 소제목',
+    chHint:'부분이 끝날 때마다 3줄. 기호는 ★ 핵심 · ? 의문·반대 · → 적용.',
     catLabel:'분야 및 출처', catHint:'예: 칼럼 / 한겨레(2024)',
     core:    {label:'핵심질문과 저자의 답',      hint:'이 글이 답하려는 중심 질문은? 글쓴이는 어떻게 답하는가? 논문이라면 핵심 연구 문제(‘서론’의 마지막 부분에).'},
     gap:     {label:'기존 지식과의 차이점',      hint:'이미 알려진 것과 이 글이 더하는 것'},
@@ -534,12 +579,24 @@ let currentId = null;
 let currentFilter = 'all';
 let tabMode = 'mine';
 let rating = 0;
+let depth = '';        // 작성 중인 카드의 읽는 깊이 ('' = 미정)
+let unfolded = false;  // [접힌 칸 펼치기]를 눌렀는지 (이번 작성 동안만)
+
+/* ── 읽는 깊이 ──
+   고른 깊이에서 보이는 칸. 목록에 없는 칸은 "비어 있을 때만" 접습니다.
+   미정('')이면 모든 칸이 보입니다. 제목·저자·날짜·태그·공개는 늘 보입니다. */
+const DEPTHS = ['훑는','남기는','깊이'];
+const DEPTH_NAME = { '훑는':'훑는', '남기는':'남기는', '깊이':'깊이 읽는' };
+const DEPTH_FIELDS = {
+  '훑는':   ['core'],
+  '남기는': ['core','quotes','rating']
+};
 
 /* ── 질문 항목 폼 만들기 (일반 입력칸으로 순서대로 배치) ── */
 function buildDeepSections(){
   const box = document.getElementById('deepSections');
   box.innerHTML = FORM_KEYS.map(k=>`
-    <div class="field">
+    <div class="field" data-depth-key="${k}">
       <label for="f_${k}" id="lbl_${k}"></label>
       <div class="hint" id="hint_${k}"></div>
       <textarea id="f_${k}"></textarea>
@@ -561,7 +618,94 @@ function applyTypeLabels(){
   ['책','논문','기타'].forEach(t=>{
     document.getElementById('guide_'+t).classList.toggle('on', t===type);
   });
+  /* 장별 메모: 책은 "장", 논문·기타는 "부분" */
+  document.getElementById('lblCh').textContent = m.chLabel;
+  document.getElementById('hintCh').textContent = m.chHint;
+  document.getElementById('addChBtn').textContent = m.chAdd;
+  document.querySelectorAll('#chList .ch-t').forEach(i=>{ i.placeholder = m.chTitle; });
+  drawDepth();
+  applyDepth();
 }
+
+/* ── 읽는 깊이 버튼 (하나만 고름, 다시 누르면 미정) ── */
+function drawDepth(){
+  const noun = (META[document.getElementById('fType').value]||META['기타']).noun;
+  const box = document.getElementById('depthPick');
+  box.innerHTML = '';
+  DEPTHS.forEach(d=>{
+    const b = document.createElement('button');
+    b.type = 'button';
+    b.textContent = DEPTH_NAME[d] + ' ' + noun;
+    b.className = depth===d ? 'on' : '';
+    b.setAttribute('aria-pressed', depth===d);
+    b.onclick = ()=>{ depth = (depth===d ? '' : d); drawDepth(); applyDepth(); scheduleDraftSave(); };
+    box.appendChild(b);
+  });
+}
+
+/* 칸에 내용이 있는지. 내용이 있는 칸은 깊이와 상관없이 절대 접지 않습니다. */
+function fieldHasContent(key){
+  if(key==='rating') return rating > 0;
+  if(key==='quotes') return [...document.querySelectorAll('#quoteList textarea')].some(t=>t.value.trim());
+  if(key==='chapters') return [...document.querySelectorAll('#chList input, #chList textarea')].some(e=>e.value.trim());
+  const el = document.getElementById('f_'+key);
+  return !!(el && el.value.trim());
+}
+
+/* 고른 깊이에 맞춰 빈 칸을 접습니다. 데이터는 지우지 않습니다. */
+function applyDepth(){
+  const keep = (!unfolded && DEPTH_FIELDS[depth]) || null;   /* null이면 전부 보임 */
+  let n = 0;
+  document.querySelectorAll('#viewForm [data-depth-key]').forEach(el=>{
+    const key = el.dataset.depthKey;
+    const fold = !!keep && !keep.includes(key) && !fieldHasContent(key);
+    el.classList.toggle('folded', fold);
+    if(fold && key!=='guide') n++;
+  });
+  const bar = document.getElementById('unfoldBar');
+  bar.classList.toggle('hidden', n===0);
+  bar.querySelector('button').textContent = '접힌 칸 ' + n + '개 펼치기';
+  /* 훑는 책은 핵심질문을 한 문장만 */
+  const type = document.getElementById('fType').value;
+  const h = document.getElementById('hint_core');
+  h.textContent = (META[type]||META['기타']).core.hint + (depth==='훑는' ? ' — 훑는 '+(META[type]||META['기타']).noun+'은 한 문장이면 충분합니다.' : '');
+}
+function unfoldAll(){ unfolded = true; applyDepth(); }
+
+/* ── 장별 메모 행: 제목 + 주장 / 근거 / 내 반응 ── */
+const CH_FIELDS = [['claim','저자 주장'],['evidence','근거'],['reaction','내 반응']];
+function addChapterRow(ch){
+  ch = ch || {};
+  const m = META[document.getElementById('fType').value] || META['기타'];
+  const row = document.createElement('div');
+  row.className = 'ch-item';
+  row.innerHTML = `<div class="ch-head"><input class="ch-t" aria-label="제목">
+      <button class="ghost" type="button" onclick="removeChapterRow(this)" aria-label="이 메모 지우기">✕</button></div>` +
+    CH_FIELDS.map(([k,ph])=>`<textarea class="ch-${k}" rows="1" placeholder="${ph}" aria-label="${ph}"></textarea>`).join('');
+  const t = row.querySelector('.ch-t');
+  t.placeholder = m.chTitle;
+  t.value = ch.title || '';
+  CH_FIELDS.forEach(([k])=>{ row.querySelector('.ch-'+k).value = ch[k] || ''; });
+  document.getElementById('chList').appendChild(row);
+  row.querySelectorAll('textarea').forEach(autoGrow);
+  if(!ch.title && !arguments.length) t.focus();
+}
+function removeChapterRow(btn){
+  const row = btn.closest('.ch-item');
+  const has = [...row.querySelectorAll('input, textarea')].some(e=>e.value.trim());
+  if(has && !confirm('이 메모를 지울까요?')) return;
+  row.remove();
+  applyDepth();
+  scheduleDraftSave();
+}
+function readChapters(){
+  return [...document.querySelectorAll('#chList .ch-item')].map(r=>{
+    const c = { title: r.querySelector('.ch-t').value };
+    CH_FIELDS.forEach(([k])=>{ c[k] = r.querySelector('.ch-'+k).value; });
+    return c;
+  });
+}
+function chapterFilled(c){ return !!(c && (c.title||c.claim||c.evidence||c.reaction)); }
 
 /* ── 입력칸 높이 자동 조절 ──
    높이를 재기 위해 잠깐 접었다 펴는데, 그 사이 브라우저가 스크롤 위치를
@@ -725,6 +869,7 @@ function rowToCard(r){
     summary:r.summary_note||'', group:r.group_notes||'',
     action:r.action_note||'',          /* 예전 버전 항목 (있으면 상세에서 보여줌) */
     tags:r.tags||[], is_public: r.is_public !== false,
+    depth:r.depth||'', chapters:r.chapters||[],
     created_at:r.created_at
   };
 }
@@ -738,6 +883,8 @@ function cardToRow(c){
     thoughts:c.thoughts||null, validity_check:c.validity||null, counter_view:c.counter||null,
     summary_note:c.summary||null, group_notes:c.group||null,
     tags:c.tags, is_public:c.is_public !== false,
+    depth: DEPTHS.includes(c.depth) ? c.depth : null,
+    chapters: Array.isArray(c.chapters) ? c.chapters.filter(chapterFilled) : [],
     user_id:currentUser.id
   };
 }
@@ -755,6 +902,9 @@ function render(){
   if(currentFilter==='reading') list = list.filter(c=>!c.end);
   if(currentFilter==='pinned') list = list.filter(c=>pinSet.has(c.id));
   if(tf) list = list.filter(c=>c.type===tf);
+  const df = document.getElementById('depthFilter').value;
+  if(df==='none') list = list.filter(c=>!c.depth);
+  else if(df) list = list.filter(c=>c.depth===df);
   if(q) list = list.filter(c =>
     (c.title+' '+(c.author||'')+' '+(c.tags||[]).join(' ')).toLowerCase().includes(q));
 
@@ -772,7 +922,7 @@ function render(){
     return `
     <div class="card${pinned?' is-pinned':''}" onclick="showDetail('${c.id}')" role="button" tabindex="0"
          onkeydown="if(event.key==='Enter')showDetail('${c.id}')">
-      <div class="callno"><span>${esc(c.type)} · ${esc(c.category||'미분류')}</span><span>${esc((c.end||c.start||'').replaceAll('-','.'))}</span></div>
+      <div class="callno"><span>${esc(c.type)} · ${esc(c.category||'미분류')}${c.depth?' · '+esc(DEPTH_NAME[c.depth]||c.depth):''}</span><span>${esc((c.end||c.start||'').replaceAll('-','.'))}</span></div>
       <h3>${esc(c.title)}</h3>
       <div class="meta">${esc(c.author||'저자 미상')}</div>
       ${c.rating ? `<div class="stars" aria-label="별점 ${c.rating}점">${stars(c.rating)}</div>` : ''}
@@ -821,6 +971,9 @@ function renderStats(){
     <div class="stat-bar"><span style="width:${max?Math.round(n/max*100):0}%"></span></div><span class="n">${n}</span></div>`;
   const yMax = Math.max(0, ...years.map(y=>byYear[y]));
   const tMax = Math.max(...Object.values(byType));
+  const byDepth = {'훑는':0,'남기는':0,'깊이 읽는':0,'미정':0};
+  cache.forEach(c=>{ byDepth[c.depth ? (DEPTH_NAME[c.depth]||'미정') : '미정']++; });
+  const dMax = Math.max(...Object.values(byDepth));
   box.innerHTML = `
     <button class="stats-head" onclick="toggleStats()" aria-expanded="${statsOpen}">
       <span>올해 완독 <b>${byYear[thisYear]||0}</b>권 · 읽는 중 <b>${cache.length-done.length}</b>권 · 전체 <b>${cache.length}</b>권</span>
@@ -831,6 +984,8 @@ function renderStats(){
       ${years.length ? years.map(y=>row(y, byYear[y], yMax)).join('') : '<p>아직 완독한 카드가 없습니다.</p>'}
       <h4>유형별</h4>
       ${Object.keys(byType).map(t=>row(t, byType[t], tMax)).join('')}
+      <h4>깊이별</h4>
+      ${Object.keys(byDepth).map(d=>row(d, byDepth[d], dMax)).join('')}
     </div>` : ''}`;
 }
 
@@ -898,7 +1053,8 @@ function readForm(){
     end:      document.getElementById('fEnd').value,
     tags:     document.getElementById('fTags').value,
     is_public:document.getElementById('fPublic').checked,
-    rating, quotes
+    rating, quotes, depth,
+    chapters: readChapters()
   };
   FORM_KEYS.forEach(k=>{ d[k] = document.getElementById('f_'+k).value; });
   return d;
@@ -918,6 +1074,10 @@ function fillForm(d){
   document.getElementById('quoteList').innerHTML='';
   (d.quotes||[]).forEach(q=>addQuoteRow(q.text,q.page));
   if(!(d.quotes||[]).length) addQuoteRow();
+  depth = DEPTHS.includes(d.depth) ? d.depth : '';
+  unfolded = false;
+  document.getElementById('chList').innerHTML='';
+  (d.chapters||[]).forEach(ch=>addChapterRow(ch));
 }
 
 function isEmptyDraft(d){
@@ -925,6 +1085,7 @@ function isEmptyDraft(d){
   if(d.title || d.author || d.category || d.tags || d.rating) return false;
   if(FORM_KEYS.some(k=>d[k])) return false;
   if((d.quotes||[]).some(q=>q.text)) return false;
+  if((d.chapters||[]).some(chapterFilled)) return false;
   return true;
 }
 
@@ -979,6 +1140,7 @@ function openForm(id){
     type:c.type, title:c.title, author:c.author, category:c.category,
     start:c.start, end:c.end, tags:(c.tags||[]).join(', '),
     is_public:c.is_public, rating:c.rating, quotes:c.quotes,
+    depth:c.depth, chapters:c.chapters,
     ...Object.fromEntries(FORM_KEYS.map(k=>[k, c[k]]))
   } : {};
   const draft = loadDraft();
@@ -999,6 +1161,7 @@ function discardDraft(){
     type:c.type, title:c.title, author:c.author, category:c.category,
     start:c.start, end:c.end, tags:(c.tags||[]).join(', '),
     is_public:c.is_public, rating:c.rating, quotes:c.quotes,
+    depth:c.depth, chapters:c.chapters,
     ...Object.fromEntries(FORM_KEYS.map(k=>[k, c[k]]))
   } : {});
   applyTypeLabels();
@@ -1036,6 +1199,8 @@ async function saveCard(){
     counter:  prev?.counter||'',
     summary:  prev?.summary||'',
     is_public:document.getElementById('fPublic').checked,
+    depth,
+    chapters: readChapters().map(ch=>Object.fromEntries(Object.entries(ch).map(([k,v])=>[k, v.trim()]))).filter(chapterFilled),
     tags:     document.getElementById('fTags').value.split(',').map(t=>t.trim()).filter(Boolean),
   };
   FORM_KEYS.forEach(k=>{ card[k] = document.getElementById('f_'+k).value.trim(); });
@@ -1066,6 +1231,13 @@ function showDetail(id){
     .filter(k=>c[k])
     .map(k=>`<div class="section-label">${esc(m[k].label)}</div><p>${esc(c[k])}</p>`)
     .join('');
+  /* 장별 메모: 장마다 제목 + 주장 / 근거 / 반응 (빈 줄은 생략) */
+  const chs = (c.chapters||[]).filter(chapterFilled);
+  const chHtml = chs.length ? `<div class="section-label">${esc(m.chLabel)}</div>` + chs.map(ch=>`
+    <div class="chapter">
+      ${ch.title?`<h4>${esc(ch.title)}</h4>`:''}
+      ${CH_FIELDS.filter(([k])=>ch[k]).map(([k,ph])=>`<p><span class="k">${esc(ph.replace('저자 ',''))}</span>${esc(ch[k])}</p>`).join('')}
+    </div>`).join('') : '';
   /* 예전 버전에서 적었던 항목들: 값이 있을 때만 표시 */
   const legacyHtml =
     (c.oneline?`<div class="section-label">한 줄 요약</div><p>${esc(c.oneline)}</p>`:'') +
@@ -1074,11 +1246,12 @@ function showDetail(id){
     (c.action?`<div class="section-label">삶에 적용할 것</div><p>${esc(c.action)}</p>`:'');
   document.getElementById('detailBody').innerHTML=`
     <div class="callno" style="font-size:.7rem;letter-spacing:.18em;color:var(--ink-soft);margin-bottom:8px;display:flex;justify-content:space-between;">
-      <span>${esc(c.type)} · ${esc(c.category||'미분류')}</span><span>${esc(period)}</span>
+      <span>${esc(c.type)} · ${esc(c.category||'미분류')}${c.depth?' · '+esc(DEPTH_NAME[c.depth]||c.depth):''}</span><span>${esc(period)}</span>
     </div>
     <h2 style="font-family:var(--serif);font-weight:900;font-size:1.4rem;">${esc(c.title)}</h2>
     <p style="color:var(--ink-soft);margin-top:4px;">${esc(c.author||'저자 미상')}${mine?'':' · <b>'+esc(nickMap[c.user_id]||'익명')+'</b>님의 카드'}</p>
     ${c.rating?`<div class="stars">${stars(c.rating)}</div>`:''}
+    ${chHtml}
     ${deepHtml}
     ${legacyHtml}
     ${c.quotes?.length?`<div class="section-label">인상 깊은 문장</div>`+
@@ -1132,6 +1305,7 @@ async function importJSON(ev){
 /* ── 이벤트 ── */
 document.getElementById('search').addEventListener('input', render);
 document.getElementById('typeFilter').addEventListener('change', render);
+document.getElementById('depthFilter').addEventListener('change', render);
 document.getElementById('filters').addEventListener('click', e=>{
   if(e.target.tagName!=='BUTTON') return;
   currentFilter=e.target.dataset.f;
