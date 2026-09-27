@@ -289,6 +289,8 @@
   }
   .footer-tools{display:flex; gap:8px; justify-content:center; margin-top:32px; flex-wrap:wrap;}
   .footer-tools button{font-size:.78rem; padding:7px 12px;}
+  .guide-bar{display:flex; justify-content:flex-end; margin:0 0 12px;}
+  .guide-bar button{font-size:.82rem; padding:7px 12px;}
   .notice{text-align:center; font-size:.75rem; color:var(--ink-soft); margin-top:14px; line-height:1.6;}
   .hidden{display:none;}
   @media (prefers-reduced-motion: reduce){ *{transition:none !important;} }
@@ -296,7 +298,7 @@
   /* ── 인쇄: 카드 내용만 종이에 출력 ── */
   @media print{
     body{background:#fff; padding:0;}
-    header, .actions, #logoutBtn, .pin-toggle, .stats{display:none !important;}
+    header, .guide-bar, .actions, #logoutBtn, .pin-toggle, .stats{display:none !important;}
     .wrap{max-width:none; padding:0;}
     #viewDetail .sheet{border:none; box-shadow:none; padding:0;}
     .detail blockquote{page-break-inside:avoid;}
@@ -354,6 +356,9 @@
 
   <!-- 목록 화면 -->
   <div id="viewList" class="hidden">
+    <div class="guide-bar">
+      <button class="ghost" onclick="window.open('study-guide.html','_blank','noopener')">📖 책 정리 및 스터디 준비 가이드</button>
+    </div>
     <div class="tabs">
       <button id="tabMine" class="on" onclick="switchTab('mine')">내 서재</button>
       <button id="tabAll" onclick="switchTab('all')">모두의 서재</button>
@@ -381,9 +386,6 @@
       <button class="ghost" onclick="openNick()">닉네임 변경</button>
       <input type="file" id="importFile" accept=".json" class="hidden" onchange="importJSON(event)">
     </div>
-    <div class="footer-tools" style="margin-top:8px">
-      <button class="ghost" onclick="window.open('study-guide.html','_blank','noopener')">스터디 가이드</button>
-    </div>
     <p class="notice">기록은 Supabase 데이터베이스에 저장되어 모든 기기에서 동기화됩니다.</p>
   </div>
 
@@ -391,7 +393,7 @@
   <div id="viewForm" class="hidden">
     <div class="sheet">
       <h2 id="formTitle">새 카드 작성</h2>
-      <p class="sub">필수 항목은 제목뿐입니다. 나머지는 필요한 만큼만 적으면 됩니다. · <a href="study-guide.html" target="_blank" rel="noopener">스터디 가이드</a></p>
+      <p class="sub">필수 항목은 제목뿐입니다. 나머지는 필요한 만큼만 적으면 됩니다. · <a href="study-guide.html" target="_blank" rel="noopener">책 정리 및 스터디 준비 가이드</a></p>
 
       <div class="draft-bar hidden" id="draftBar">
         <span>작성하던 내용을 그대로 불러왔어요.</span>
