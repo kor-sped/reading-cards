@@ -375,7 +375,7 @@
   <!-- 목록 화면 -->
   <div id="viewList" class="hidden">
     <div class="guide-bar">
-      <button class="ghost" onclick="window.open('study-guide.html','_blank','noopener')">📖 책 정리하고 스터디 준비하는 방법</button>
+      <button class="ghost" onclick="location.href='study-guide.html'">📖 책 정리하고 스터디 준비하는 방법</button>
     </div>
     <div class="tabs">
       <button id="tabMine" class="on" onclick="switchTab('mine')">내 서재</button>
@@ -416,7 +416,7 @@
   <div id="viewForm" class="hidden">
     <div class="sheet">
       <h2 id="formTitle">새 카드 작성</h2>
-      <p class="sub">필수 항목은 제목뿐입니다. 나머지는 필요한 만큼만 적으면 됩니다. · <a href="study-guide.html" target="_blank" rel="noopener">책 정리하고 스터디 준비하는 방법</a></p>
+      <p class="sub">필수 항목은 제목뿐입니다. 나머지는 필요한 만큼만 적으면 됩니다. · <a href="study-guide.html" onclick="saveDraft()">책 정리하고 스터디 준비하는 방법</a></p>
 
       <div class="draft-bar hidden" id="draftBar">
         <span>작성하던 내용을 그대로 불러왔어요.</span>
@@ -481,8 +481,8 @@
       </div>
 
       <label class="check">
-        <input type="checkbox" id="fPublic" checked>
-        모두의 서재에 공개 (끄면 나만 볼 수 있어요)
+        <input type="checkbox" id="fPublic">
+        모두의 서재에 공개 (켜면 로그인한 모두가 볼 수 있어요)
       </label>
 
       <div class="actions">
@@ -1068,7 +1068,7 @@ function fillForm(d){
   document.getElementById('fStart').value    = d.start||'';
   document.getElementById('fEnd').value      = d.end||'';
   document.getElementById('fTags').value     = d.tags||'';
-  document.getElementById('fPublic').checked = d.is_public !== false;
+  document.getElementById('fPublic').checked = d.is_public === true;  /* 새 카드는 꺼진 채(나만 보기)로 시작 */
   FORM_KEYS.forEach(k=>{ document.getElementById('f_'+k).value = d[k]||''; });
   rating = d.rating||0; drawRating();
   document.getElementById('quoteList').innerHTML='';

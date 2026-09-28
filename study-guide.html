@@ -72,10 +72,14 @@ pre code{background:none;padding:0}
 .toc ol{margin:0}
 .toc a{color:var(--teal);text-decoration:none}
 .toc a:hover{text-decoration:underline}
+.back-app{position:fixed;left:12px;bottom:calc(12px + env(safe-area-inset-bottom,0px));z-index:10;background:var(--paper);color:var(--teal);border:1px solid var(--line);border-radius:999px;padding:8px 14px;font-size:.9rem;font-weight:500;text-decoration:none;box-shadow:0 2px 8px rgba(0,0,0,.15)}
+.back-top{display:inline-block;margin-bottom:18px;color:var(--teal);text-decoration:none;font-size:.95rem}
+@media print{.back-app,.back-top{display:none}}
 </style>
 </head>
 <body>
 <main>
+<a class="back-top" href="index.html">← 독서카드함으로 돌아가기</a>
 
 <h1>책 정리하고 스터디 준비하는 방법</h1>
 <div class="intro-rule"></div>
@@ -344,5 +348,6 @@ pre code{background:none;padding:0}
 
 <p style="margin-top:56px;font-size:.85rem;color:var(--ink-2);border-top:1px solid var(--line);padding-top:14px">독서카드함 함께 쓰는 안내 문서. 카드의 항목 이름과 같은 순서로 쓰여 있어, 읽으면서 바로 카드를 채울 수 있습니다.</p>
 </main>
+<a class="back-app" href="index.html" aria-label="독서카드함으로 돌아가기">← 카드함</a>
 </body>
 </html>
